@@ -9,9 +9,9 @@ import { TodoList } from './components/TodoList';
 
 export const App = () => {
   const [todos, setTodos] = useState<Todo[]>(() =>
-    todosFromServer.map(todo => ({
-      ...todo,
-      user: usersFromServer.find(user => user.id === todo.userId),
+    todosFromServer.map(todoItem => ({
+      ...todoItem,
+      user: usersFromServer.find(user => user.id === todoItem.userId),
     })),
   );
   const [title, setTitle] = useState('');
@@ -35,9 +35,12 @@ export const App = () => {
       return;
     }
 
-    const user = usersFromServer.find(u => u.id === userId);
+    const user = usersFromServer.find(foundUser => foundUser.id === userId);
 
-    const newId = todos.length > 0 ? Math.max(...todos.map(t => t.id)) + 1 : 1;
+    const newId =
+      todos.length > 0
+        ? Math.max(...todos.map(todoItem => todoItem.id)) + 1
+        : 1;
 
     const newTodo: Todo = {
       id: newId,
@@ -67,8 +70,8 @@ export const App = () => {
             id="titleInput"
             value={title}
             placeholder="Enter a title"
-            onChange={e => {
-              setTitle(e.target.value);
+            onChange={event => {
+              setTitle(event.target.value);
               if (titleError) {
                 setTitleError(false);
               }
@@ -83,8 +86,8 @@ export const App = () => {
             data-cy="userSelect"
             id="userSelect"
             value={userId}
-            onChange={e => {
-              setUserId(+e.target.value);
+            onChange={event => {
+              setUserId(+event.target.value);
               if (userError) {
                 setUserError(false);
               }
